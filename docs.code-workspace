@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "docs",
+			"path": "../neuromate/docs"
+		},
+		{
+			"name": "chatgpt",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

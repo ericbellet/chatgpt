@@ -1,5 +1,13 @@
 Notes:
 
+The steps are:
+
+Preprocess the contextual information by splitting it into chunks and create an embedding vector for each chunk.
+On receiving a query, embed the query in the same vector space as the context chunks and find the context embeddings which are most similar to the query.
+Prepend the most relevant context embeddings to the query prompt.
+Submit the question along with the most relevant context to GPT, and receive an answer which makes use of the provided contextual information.
+https://github.com/openai/openai-cookbook/blob/main/examples/Question_answering_using_embeddings.ipynb
+
 chunks = textwrap.wrap(article,4000)
 
 Salience (que herramienta usar para una tarea) and Anticipation. 
@@ -19,6 +27,7 @@ https://www.pinecone.io/learn/nlp/
 Chunk data: https://gist.github.com/jamescalam/97c9e72de78c51c59a9b915186df7733#file-openai-transcripts-merge-snippets-ipynb
 Chunk in paralel: https://github.com/pinecone-io/examples/blob/master/search/semantic-search/jeopardy/jeopardy.ipynb
 Deduplication: https://github.com/pinecone-io/examples/blob/master/search/semantic-search/deduplication/deduplication_scholarly_articles.ipynb
+Preprocess data: https://github.com/gkamradt/langchain-tutorials/blob/main/data_generation/Clean%20and%20Standardize%20Data.ipynb
 Dibujo de arquitectura: https://betterprogramming.pub/fixing-youtube-search-with-openais-whisper-90bb569073cf
 Overlab chunks: https://gist.github.com/jamescalam/17df40133d11c3c25aa9f4045c9d1145#file-whisper-yt-search-longer-segments-ipynb
 Long texts: https://github.com/jamescalam/openai-cookbook/blob/main/examples/Embedding_long_inputs.ipynb
@@ -27,6 +36,7 @@ Semantic Search using embeddings: https://github.com/jamescalam/openai-cookbook/
 Long texts: https://github.com/jamescalam/openai-cookbook/blob/main/examples/Embedding_long_inputs.ipynb
 Advance propmpts: https://github.com/jamescalam/openai-cookbook/blob/main/techniques_to_improve_reliability.md
 Improve fine-tunning: https://docs.google.com/document/d/1rqj7dkuvl7Byd5KQPUJRxc19BJt8wo0yHNwK84KfU3Q/edit
+Memory: https://langchain.readthedocs.io/en/latest/modules/memory/getting_started.html (https://www.youtube.com/watch?v=7RcS8FHGdW4&list=WL&index=1)
 
 OpenAI Embedding endpoint to create vector representations of each query.
 Pinecone vector database to search for relevant passages from the database of previously indexed contexts.
@@ -141,4 +151,6 @@ Using title element to label the HTML document that contains the book
 Using alt attribute to label the image of the book cover
 Using headings or subheadings to label the chapters and sections of the book
 Using optgroup element to label the groups of chapters or sections in a table of contents
-Using aria-label or aria-labelledby attributes to label any dialogs or interactive elements in the book
+Using aria-label or aria-labelledby attributes to label any dialogs or interactive elements in the book.
+
+UnstructuredPDFLoader can provide more information about the source and structure of the documents, while SimpleDirectoryReader can provide faster and simpler access to the documents.
