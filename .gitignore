@@ -2,3 +2,5 @@ config.ini
 /docs/*
 /chunks/*
 /vectors/*
+/tests
+__pycache__/

@@ -154,3 +154,15 @@ Using optgroup element to label the groups of chapters or sections in a table of
 Using aria-label or aria-labelledby attributes to label any dialogs or interactive elements in the book.
 
 UnstructuredPDFLoader can provide more information about the source and structure of the documents, while SimpleDirectoryReader can provide faster and simpler access to the documents.
+
+Crear una zona alojada en Route 53: Si aún no tienes una zona alojada en Route 53 para tu dominio "datablackgold.com", debes crearla primero. Para hacer esto, ve a la consola de AWS y selecciona "Route 53". Luego, haz clic en "Zonas alojadas" y después en "Crear zona alojada". Ingresa el nombre de tu dominio "datablackgold.com" y haz clic en "Crear".
+
+Crear un registro A en Route 53: Para que el subdominio "api.datablackgold.com" apunte a tu instancia EC2, debes crear un registro A en la zona alojada de Route 53 que apunte a la dirección IP pública de tu instancia EC2. Para hacer esto, en la consola de AWS, selecciona la zona alojada que creaste en el paso anterior y haz clic en "Crear registro". Selecciona "Registro A - IPv4" y completa la información requerida, incluyendo el nombre de tu subdominio "api.datablackgold.com" y la dirección IP pública de tu instancia EC2. Haz clic en "Crear registro" para guardar los cambios.
+
+Configurar una API Gateway: Para que los usuarios puedan acceder a tu API de FastAPI a través de tu subdominio personalizado, debes configurar una API Gateway en AWS. Para hacer esto, ve a la consola de AWS y selecciona "API Gateway". Haz clic en "Crear API" y luego selecciona "API REST". Completa la información requerida, como el nombre de tu API, el tipo de seguridad que deseas usar y el nombre de la etapa. Luego, haz clic en "Crear API".
+
+Configurar la API Gateway para utilizar tu instancia EC2: Después de crear tu API Gateway, debes configurarla para utilizar tu instancia EC2. Para hacer esto, selecciona "Recursos" en el panel de navegación izquierdo y luego haz clic en "Crear recurso". Completa la información requerida, como el nombre de tu recurso y el tipo de recurso (por ejemplo, "proxy"). Luego, haz clic en "Crear recurso".
+
+Configurar la integración de la API Gateway: Después de crear tu recurso, debes configurar la integración de la API Gateway para utilizar tu instancia EC2. Para hacer esto, selecciona el recurso que acabas de crear y haz clic en "Crear método". Selecciona "ANY" como el tipo de método y haz clic en "Aceptar". Luego, selecciona "Integración HTTP" como el tipo de integración y completa la información requerida, incluyendo la dirección IP pública de tu instancia EC2 y el puerto utilizado por tu API de FastAPI. Haz clic en "Guardar" para guardar los cambios.
+
+Configurar la respuesta de la API Gateway: Después de configurar la integración de la API Gateway, debes configurar la respuesta de la API Gateway para que muestre la respuesta de tu API de FastAPI. Para hacer esto, selecciona "Mapeo de respuesta" en el panel de navegación izquierdo y luego haz clic en "Crear nuevo mapeo de respuesta". Selecciona "200" como el código de

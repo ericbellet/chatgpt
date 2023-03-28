@@ -1,6 +1,7 @@
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from openai.embeddings_utils import get_embedding, cosine_similarity
+from parameters import *
 import configparser
 import pandas as pd
 import numpy as np
@@ -9,23 +10,12 @@ import tiktoken
 import logging
 import pickle
 import openai
+import time
 import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
-CHUNKS = 20
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 0
-COMPLETIONS_MODEL = "gpt-3.5-turbo"
-EMBEDDING_MODEL = "text-embedding-ada-002"
-COMPLETIONS_API_PARAMS = {
-                    "temperature": 0.0,
-                    "max_tokens": 300,
-                    "model": COMPLETIONS_MODEL,
-                     }
-MAX_SECTION_LEN = 4097 - 8 - COMPLETIONS_API_PARAMS['max_tokens']
-SEPARATOR = "\n* "
-HEADER = "Answer the question as truthfully as possible using the provided context, and if the answer is not contained within the text below, say 'I don't know.'"
+
 
 def num_tokens_from_string(string: str, encoding_name="cl100k_base") -> int:
     """Returns the number of tokens in a text string."""
@@ -67,13 +57,19 @@ class GPT():
 
         return chunks
     
+    def obtain_embedding(self, chunk_number, page_content, engine):
+        logger.info(f"Chunk number: {chunk_number}")
+        return get_embedding(page_content, engine)
+
+ 
     def get_df_embedded(self, chunks, vector_name):
-        chunks = chunks[:CHUNKS] #=========================REMOVE LINE=============================
+        logging.info(f'Embedding total of chunks: {len(chunks)}')
         file = f'vectors/{vector_name}.pkl'
         if not os.path.exists(file):
             df = pd.DataFrame([{'page_content':chunk.page_content, 
                                 'tokens': num_tokens_from_string(chunk.page_content),
-                                'embedding': get_embedding(chunk.page_content, engine=EMBEDDING_MODEL)} for chunk in chunks])
+                                'embedding': self.obtain_embedding(chunk_number, chunk.page_content, engine=EMBEDDING_MODEL)} 
+                                                                                for chunk_number, chunk in enumerate(chunks)])
             df.to_pickle(f'vectors/{vector_name}.pkl')
         
     def vector_similarity(self, query_embedding, doc_embedding):
@@ -87,18 +83,20 @@ class GPT():
     
         return document_similarities
     
-    def construct_prompt(self, question: str, document_similarities: dict, chunks_df: pd.DataFrame) -> str:
+    def construct_prompt(self, question: str, document_similarities: dict, vectors_df: pd.DataFrame) -> str:
         encoding = tiktoken.encoding_for_model(COMPLETIONS_MODEL)
         separator_len = len(encoding.encode(SEPARATOR))        
         chosen_sections = []
         chosen_sections_len = 0
         chosen_sections_indexes = []
+        extra_tokens = num_tokens_from_string(question) + num_tokens_from_string(HEADER) + separator_len
+        max_section_len = MAX_SECTION_LEN - extra_tokens
+        logging.info(f"Maximum prompt's tokens: {max_section_len}")
         
         for _, section_index in document_similarities:
-            # Add contexts until we run out of space.        
-            document_section = chunks_df.loc[section_index]            
-            chosen_sections_len += document_section.tokens + separator_len
-            if chosen_sections_len > MAX_SECTION_LEN:
+            document_section = vectors_df.loc[section_index]            
+            chosen_sections_len += document_section.tokens + extra_tokens
+            if chosen_sections_len > max_section_len:
                 break
                 
             chosen_sections.append(SEPARATOR + document_section.page_content.replace("\n", " "))
@@ -131,29 +129,26 @@ class GPT():
                 logging.info(f'Loading vector: {f}')
                 df = pd.read_pickle(os.path.join(path, f))
                 dfs.append(df)
-        return pd.concat(dfs)
+        return pd.concat(dfs, ignore_index=True)
+
+    def load_vectorDB(self, vectors=[], path='./vectors'):
+        files = os.listdir(path) if vectors == [] else vectors
+        self.vectorDB = self.load_vectorsDB(files, path)
 
     def preprocess(self, file_name):
         documents = self.generate_docs(file_name)
         chunks = self.chunk_data(documents, chunk_file=file_name)
         self.get_df_embedded(chunks, vector_name=file_name)
 
-    def query(self, query, vectors=[], path='./vectors'):
-        files = os.listdir(path) if vectors == [] else vectors
-        vectorsDB = self.load_vectorsDB(files, path)
-
-        document_similarities = self.obtain_similar_vectors(query, vectorsDB)
-        prompt = self.construct_prompt(query, document_similarities, vectorsDB)
+    def query(self, query):
+        document_similarities = self.obtain_similar_vectors(query, self.vectorDB)
+        prompt = self.construct_prompt(query, document_similarities, self.vectorDB)
         answer = self.answer_query_with_context(prompt)
-        print(answer)
+        return answer
 
 if __name__ == '__main__':
-    file_name = 'DeliveringHappiness'
-    gpt = GPT()
-    #gpt.preprocess(file_name)
-
-    query = "Existe la felicidad para los empleados?"
-    gpt.query(query)
-
-
-
+    file_names = ['DeliveringHappiness', 
+                  'Handbook-ExperienceEconomyPastPresentandFuture',
+                  'Pine_Gilmore_The_experience_economy_1999']
+    preprocessData = GPT()
+    [preprocessData.preprocess(file_name) for file_name in file_names]
