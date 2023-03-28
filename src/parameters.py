@@ -1,3 +1,6 @@
+ENVIRONMENT = 'dev'
+CONTEXT = 'cxlab'
+BUCKET_NAME = 'datablackgold'
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 0
 COMPLETIONS_MODEL = "gpt-3.5-turbo"

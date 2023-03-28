@@ -1,20 +1,15 @@
+import configparser
+import pandas as pd
+import tiktoken
+import pickle
+import openai
+import os
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from openai.embeddings_utils import get_embedding, cosine_similarity
+from utils import logger
 from parameters import *
-import configparser
-import pandas as pd
-import numpy as np
-import gradio as gr
-import tiktoken
-import logging
-import pickle
-import openai
-import time
-import os
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()
+from s3 import S3
 
 
 def num_tokens_from_string(string: str, encoding_name="cl100k_base") -> int:
@@ -30,8 +25,10 @@ class GPT():
         with open(config_file) as f:
             config = configparser.ConfigParser()
             config.read_file(f)
-        os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY') or config.get('PERSONAL', 'OPENAI_API_KEY')
+        os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY') or config.get(CONTEXT, 'OPENAI_API_KEY')
         openai.api_key = os.environ["OPENAI_API_KEY"]
+        if ENVIRONMENT != 'local':
+            self.s3 = S3()
     
     def generate_docs(self, file_name):
         data = []
@@ -91,7 +88,7 @@ class GPT():
         chosen_sections_indexes = []
         extra_tokens = num_tokens_from_string(question) + num_tokens_from_string(HEADER) + separator_len
         max_section_len = MAX_SECTION_LEN - extra_tokens
-        logging.info(f"Maximum prompt's tokens: {max_section_len}")
+        logger.info(f"Maximum prompt's tokens: {max_section_len}")
         
         for _, section_index in document_similarities:
             document_section = vectors_df.loc[section_index]            
@@ -102,7 +99,7 @@ class GPT():
             chosen_sections.append(SEPARATOR + document_section.page_content.replace("\n", " "))
             chosen_sections_indexes.append(str(section_index))
                 
-        logger.info(f"Selected {len(chosen_sections)} document sections:")
+        logger.info(f"Selected {len(chosen_sections)} document sections.")
         logger.info("\n".join(chosen_sections_indexes))
         
         header = f"""{HEADER}\n\nContext:\n""" 
@@ -122,18 +119,27 @@ class GPT():
 
         return response["choices"][0]["message"]["content"].strip(" \n")           
 
-    def load_vectorsDB(self, files, path):
+    def load_vectors(self, vectors, path):
         dfs = []
-        for f in files:
-            if f.endswith('.pkl'):
-                logging.info(f'Loading vector: {f}')
-                df = pd.read_pickle(os.path.join(path, f))
+        for vector in vectors:
+            if ENVIRONMENT == 'local':
+                file = os.path.join(path, vector)
+            else:
+                vector = vector['Key']
+                file = self.s3.download_file(bucket_name=BUCKET_NAME, obj=vector)
+                
+            if vector.endswith('.pkl'):
+                logger.info(f'Loading vector: {vector}')
+                df = pd.read_pickle(file)
                 dfs.append(df)
+        
         return pd.concat(dfs, ignore_index=True)
 
     def load_vectorDB(self, vectors=[], path='./vectors'):
-        files = os.listdir(path) if vectors == [] else vectors
-        self.vectorDB = self.load_vectorsDB(files, path)
+        logger.info(f"Loading vector database of the environment: {ENVIRONMENT}")
+        vectors = os.listdir(path) if ENVIRONMENT == 'local' else self.s3.list_objects(bucket_name=BUCKET_NAME, 
+                                                                                       prefix='vectors/')['Contents']
+        self.vectorDB = self.load_vectors(vectors, path)
 
     def preprocess(self, file_name):
         documents = self.generate_docs(file_name)
@@ -151,4 +157,6 @@ if __name__ == '__main__':
                   'Handbook-ExperienceEconomyPastPresentandFuture',
                   'Pine_Gilmore_The_experience_economy_1999']
     preprocessData = GPT()
-    [preprocessData.preprocess(file_name) for file_name in file_names]
+    #[preprocessData.preprocess(file_name) for file_name in file_names]
+    preprocessData.load_vectorDB()
+    print(preprocessData.query("¿Cual es la diferencia entre el libro de The experience economy y Delivering Happiness"))
