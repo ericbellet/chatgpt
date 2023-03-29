@@ -22,6 +22,7 @@ class S3():
                     region_name=REGION_AWS
                 )
         self.s3 = session.client('s3')
+        self.s3_resource = session.resource('s3')
 
     def list_objects(self, bucket_name, prefix):
         try:
@@ -37,3 +38,15 @@ class S3():
             return byte_stream
         except Exception as e:
             logger.error(f"Error downloading objects from S3 bucket: {e}")
+
+    def check_file_exists(self, bucket_name, file_name):
+        bucket = self.s3_resource.Bucket(bucket_name)
+        objs = list(bucket.objects.filter(Prefix=file_name))
+        if len(objs) > 0 and objs[0].key == file_name:
+            return True
+        else:
+            return False
+        
+    def upload_file(self, bucket, data, object_name):
+
+        self.s3.put_object(Body=data, Bucket=bucket, Key=object_name)
