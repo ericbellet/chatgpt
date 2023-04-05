@@ -1,0 +1,499 @@
+<html>
+<head>
+  <style>
+    /* Use a custom font from Google Fonts */
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+
+    /* Use a simple color scheme of black, gold and white */
+    :root {
+      --black: #161614d3;
+      --gold: #fcb400;
+      --white: #fff;
+    }
+
+    /* Use a box-sizing of border-box for easier layout */
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Use a fixed position for the header and footer so they stay on top and bottom */
+    header, footer {
+      position: fixed;
+      width: 100%;
+      height: auto;
+      background-color: var(--black);
+      color: var(--white);
+      z-index: 10;
+      padding-left: 10px;
+      padding-right: 30px;
+
+    }
+
+        /* Use flexbox for the layout of the header and footer */
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10% var(--header-height);
+    }
+
+    /* Use a logo image for the company name */
+    .logo {
+      width: 200px;
+      height: auto;
+    }
+
+    /* Use a simple navigation menu with links to different sections */
+    nav {
+      display: flex;
+      gap: 20px;
+      font-size: 30px;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 20px;
+    }
+
+    nav a:hover {
+      color: var(--gold);
+    }
+
+    /* Use a main section with a full-screen background image and a catchy slogan */
+    main {
+      height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logohead {
+      font-family: 'Roboto', sans-serif;
+      font-size: 48px;
+      font-weight: 300;
+      color: var(--white);
+      max-width: 800px;
+      padding-left: 80;
+      padding-right: 80;
+
+    }
+    .logohead a {
+  color: inherit;
+  text-decoration: none;
+}
+
+    .logohead span {
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .slogan {
+      font-family: 'Roboto', sans-serif;
+      font-size: 48px;
+      font-weight: 300;
+      color: var(--white);
+      text-align: center;
+      max-width: 800px;
+    }
+
+    .slogan span {
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    /* Use a section with cards to showcase the services and trainings offered by the company */
+    .section {
+      padding: 200px 20px;
+    }
+    @media screen and (max-width: 768px) {
+  .section {
+    padding: 300px 20px;
+  }
+}
+    .section-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--black);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--white);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .card-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color:
+var(--black);
+margin-bottom:
+10px; } .card-text { font-family:
+'Roboto', sans-serif; font-size:
+18px; font-weight:
+300; color:
+var(--black); margin-bottom:
+20px; } .card-button { display:
+block; width:
+100%; padding:
+15px; border:
+none; background-color:
+var(--gold); color:
+var(--white);
+      font-family: 'Roboto', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .card-button:hover {
+      background-color: var(--black);
+      color: var(--gold);
+    }
+
+    /* Use a section with a contact form to allow users to get in touch with the company */
+    .contact {
+      background-color: var(--gold);
+      padding: 80px 20px;
+    }
+
+    .contact-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .email {
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-form input, .contact-form textarea {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .contact-form input[type="submit"] {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'Roboto', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .contact-form input[type="submit"]:hover {
+      background-color: var(--white);
+      color: var(--black);
+    }
+
+    /* Use media queries to make the layout responsive for different screen sizes */
+    @media (max-width: 768px) {
+      /* Use a hamburger menu icon for the navigation on small screens */
+      nav {
+        display: none;
+      }
+
+      .menu-icon {
+        display: block;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        z-index: 20;
+      }
+
+      .menu-icon span {
+        display: block;
+        width: 100%;
+        height: 4px;
+        background-color: var(--white);
+        margin-bottom: 8px;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      /* Use a slide-in menu for the navigation on small screens */
+      .slide-menu {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100%;
+        background-color:
+var(--black); color:
+var(--white);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: right 0.3s ease-in-out;
+      }
+
+      .slide-menu a {
+        display: block;
+        width: 80%;
+        padding: 15px;
+        border-bottom: 1px solid var(--white);
+        color: var(--white);
+        text-align: center;
+      }
+
+      .slide-menu a:hover {
+        color: var(--gold);
+      }
+
+      /* Use a toggle function to show and hide the slide menu */
+      .toggle {
+        right: 0;
+      }
+
+      .toggle span:nth-child(1) {
+        transform: rotate(45deg) translate(10px, 10px);
+      }
+
+      .toggle span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .toggle span:nth-child(3) {
+        transform: rotate(-45deg) translate(10px, -10px);
+      }
+
+      /* Use a smaller font size for the slogan on small screens */
+      .slogan {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Use a header element for the logo and navigation -->
+  <header>
+    <div class="container">
+      <!-- Use an image element for the logo -->
+      <!--img src="logo.png" alt="Data Black Gold" class="logo" -->
+      <p class="logohead"><a href="#"><span>Data</span> is the new<br><span>Black Gold</span></a></p>
+      <!-- Use a nav element for the navigation menu -->
+      <nav>
+        <a href="#what-we-do">What We Do</a>
+        <a href="#services">Services</a>
+        <a href="#trainings">Trainings</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <!-- Use a div element for the menu icon -->
+      <div class="menu-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+  <!-- Use a main element for the full-screen background image and slogan -->
+  <main>
+    <!-- Use a p element for the slogan -->
+    <p class="slogan">We are <span>Data Black Gold</span>,<br>professionals in data and AI.<br>We offer consulting and training<br>to help you with your necessities.</p>
+  </main>
+  <!-- Use a section element for the what we do section -->
+  <section id="what-we-do" class="section">
+    <!-- Use an h2 element for the section title -->
+    <h2 class="section-title">What We Do</h2>
+    <!-- Use a div element for the cards container -->
+    <div class="cards">
+      <!-- Use an article element for each card -->
+      <article class="card">
+        <!-- Use an img element for the card image -->
+        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80" alt="Data Analytics" class="card-image">
+        <!-- Use a div element for the card content -->
+        <div class="card-content">
+          <!-- Use an h3 element for the card title -->
+          <h3 class="card-title">Data Analytics</h3>
+          <!-- Use a p element for the card text -->
+          <p class="card-text">We help you analyze your data and gain insights to make better decisions and optimize your performance.</p>
+          <!-- Use an a element for the card button -->
+          <a href="#contact" class="card-button">Learn More</a>
+        </div>
+      </article>
+      <!-- Repeat the same structure for the other cards -->
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80" alt="Data Engineering" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Data Engineering</h3>
+          <p class="card-text">We help you design and build scalable and reliable data pipelines and platforms to store and process your data.</p>
+          <a href="#contact" class="card-button">Learn More</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80" alt="Chats with AI" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Chats with AI</h3>
+          <p class="card-text">We help you create and deploy conversational agents and chatbots using the latest AI technologies and frameworks.</p>
+          <a href="#contact" class="card-button">Learn More</a>
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- Use a section element for the services section -->
+  <section id="services" class="section">
+    <!-- Use an h2 element for the section title -->
+    <h2 class="section-title">Services</h2>
+    <!-- Use a div element for the cards container -->
+    <div class="cards">
+      <!-- Use an article element for each card -->
+      <article class="card">
+        <!-- Use an img element for the card image -->
+        <img src="https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80" alt="Consulting" class="card-image">
+        <!-- Use a div element for the card content -->
+        <div class="card-content">
+          <!-- Use an h3 element for the card title -->
+          <h3 class="card-title">Consulting</h3>
+          <!-- Use a p element for the card text -->
+          <p class="card-text">We provide expert advice and guidance on how to leverage data and AI for your business goals and challenges.</p>
+          <!-- Use an a element for the card button -->
+          <a href="#contact" class="card-button">Contact Us</a>
+        </div>
+      </article>
+      <!-- Repeat the same structure for the other cards -->
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80" alt="Development" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Development</h3>
+          <p class="card-text">We develop and implement custom data and AI solutions that meet your specific needs and requirements.</p>
+          <a href="#contact" class="card-button">Contact Us</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80" alt="Training" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Training</h3>
+          <p class="card-text">We provide ongoing training for your teams to ensure that they are equipped with the latest knowledge and skills necessary.</p>
+          <a href="#contact" class="card-button">Contact Us</a>
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- Use a section element for the trainings section -->
+  <section id="trainings" class="section">
+        <!-- Use an h2 element for the section title -->
+        <h2 class="section-title">Trainings</h2>
+        <!-- Use a div element for the cards container -->
+        <div class="cards">
+          <!-- Use an article element for each card -->
+          <article class="card">
+            <!-- Use an img element for the card image -->
+            <img src="https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80" alt="Data Analytics Training" class="card-image">
+            <!-- Use a div element for the card content -->
+            <div class="card-content">
+              <!-- Use an h3 element for the card title -->
+              <h3 class="card-title">Data Analytics Training</h3>
+              <!-- Use a p element for the card text -->
+              <p class="card-text">We teach you how to use data analysis tools and techniques to explore, visualize and communicate your data insights.</p>
+              <!-- Use an a element for the card button -->
+              <a href="#contact" class="card-button">Enroll Now</a>
+            </div>
+          </article>
+          <!-- Repeat the same structure for the other cards -->
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1527427337751-fdca2f128ce5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80" alt="Data Engineering Training" class="card-image">
+            <div class="card-content">
+              <h3 class="card-title">Data Engineering Training</h3>
+              <p class="card-text">We teach you how to use data engineering tools and frameworks to build and manage data pipelines and platforms.</p>
+              <a href="#contact" class="card-button">Enroll Now</a>
+            </div>
+          </article>
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80" alt="Chats with AI Training" class="card-image">
+            <div class="card-content">
+              <h3 class="card-title">Chats with AI Training</h3>
+              <p class="card-text">We teach you how to use AI technologies and frameworks to create and deploy conversational agents and chatbots.</p>
+              <a href="#contact" class="card-button">Enroll Now</a>
+            </div>
+          </article>
+        </div>
+      </section>
+      <!-- Use a section element for the contact section -->
+      <section id="contact" class="contact">
+        <!-- Use an h2 element for the section title -->
+        <h2 class="contact-title">Contact Us</h2>
+        <h3 class="email">datablackgold@gmail.com</h2>
+        <!-- Use a form element for the contact form -->
+        <form action="#contact" method="post" class="contact-form">
+          <!-- Use input elements for the name, email and subject fields -->
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="email" name="email" placeholder="Your Email" required>
+          <input type="text" name="subject" placeholder="Your Subject" required>
+          <!-- Use a textarea element for the message field -->
+          <textarea name="message" placeholder="Your Message" rows="10" required></textarea>
+          <!-- Use an input element for the submit button -->
+          <input type="submit" value="Send Message">
+        </form>
+      </section>
+      <!-- Use a footer element for the footer -->
+      <footer>
+        <!-- Use a div element for the container -->
+        <div class="container">
+          <!-- Use a p element for the footer text -->
+          <p>&copy; 2023 Data Black Gold. All rights reserved.</p>
+        </div>
+      </footer>
+      <!-- Use a script element for the JavaScript code -->
+      <script>
+        // Get the menu icon element
+        const menuIcon = document.querySelector('.menu-icon');
+    
+        // Get the slide menu element
+        const slideMenu = document.querySelector('.slide-menu');
+    
+        // Add a click event listener to the menu icon
+        menuIcon.addEventListener('click', function() {
+          // Toggle the slide menu right position
+          slideMenu.classList.toggle('toggle');
+    
+          // Toggle the menu icon span transform
+          menuIcon.classList.toggle('toggle');
+        });
+      </script>
+    </body>
+    </html>

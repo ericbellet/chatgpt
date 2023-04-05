@@ -4,3 +4,5 @@ config.ini
 /vectors/*
 /tests
 __pycache__/
+*.pem
+configusers.json

@@ -1,0 +1,15 @@
+[[package]]
+name = "polyglot"
+version = "16.7.4"
+description = "Polyglot is a natural language pipeline that supports massive multilingual applications."
+category = "main"
+optional = false
+python-versions = "*"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.8"
+content-hash = "c72bb7f7e801f59e9e3a096b8e5f51955edfd0099d647b1a24275260564dc4a7"
+
+[metadata.files]
+polyglot = []

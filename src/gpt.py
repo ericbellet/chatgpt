@@ -144,7 +144,21 @@ class GPT():
                     **COMPLETIONS_API_PARAMS
                 )
 
-        return response["choices"][0]["message"]["content"].strip(" \n")           
+        return response["choices"][0]["message"]["content"].strip(" \n")  
+    
+    def eval_same_language(self, question, answer):
+        from langdetect import detect
+        question_lang = detect(question)
+        answer_lang = detect(answer)
+
+        if question_lang == answer_lang:
+            return (True, question_lang)
+        else:
+            return (False, question_lang)
+
+    def translate_answer(self, answer, language):
+        prompt = f"Translate to {language} this: {answer}"
+        return self.answer_query_with_context(prompt) 
 
     def load_vectors(self, vectors, path):
         dfs = []
@@ -177,13 +191,17 @@ class GPT():
         document_similarities = self.obtain_similar_vectors(query, self.vectorDB)
         prompt = self.construct_prompt(query, document_similarities, self.vectorDB)
         answer = self.answer_query_with_context(prompt)
-        return answer
+        same_language = self.eval_same_language(query, answer)
+        if same_language[0] == True:
+            return answer
+        else:
+            return self.translate_answer(answer=answer, language=same_language[1]) 
 
 if __name__ == '__main__':
     file_names = ['DeliveringHappiness', 
                   'Handbook-ExperienceEconomyPastPresentandFuture',
                   'Pine_Gilmore_The_experience_economy_1999']
     preprocessData = GPT()
-    [preprocessData.preprocess(file_name) for file_name in file_names]
-    # preprocessData.load_vectorDB()
-    # print(preprocessData.query("¿De qué trata el libro de The experience economy?"))
+    # [preprocessData.preprocess(file_name) for file_name in file_names]
+    preprocessData.load_vectorDB()
+    print(preprocessData.query("Dime los 5 puntos más importantes de The Experience the economics"))

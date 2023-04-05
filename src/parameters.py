@@ -1,4 +1,4 @@
-ENVIRONMENT = 'dev'
+ENVIRONMENT = 'local'
 CONTEXT = 'cxlab'
 BUCKET_NAME = 'datablackgold'
 CHUNK_SIZE = 1000
@@ -12,4 +12,4 @@ COMPLETIONS_API_PARAMS = {
                      }
 MAX_SECTION_LEN = 4097 - COMPLETIONS_API_PARAMS["max_tokens"]
 SEPARATOR = "\n* "
-HEADER = "Answer the question as truthfully as possible using the provided context, and if the answer is not contained within the text below, say 'I don't know.'"
+HEADER = "Answer the question as truthfully as possible using the provided context, and if the answer is not contained within the text below, say that you don't have this info."

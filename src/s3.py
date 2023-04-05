@@ -48,5 +48,4 @@ class S3():
             return False
         
     def upload_file(self, bucket, data, object_name):
-
         self.s3.put_object(Body=data, Bucket=bucket, Key=object_name)

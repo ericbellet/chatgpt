@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gold 3D Letter</title>
+	<style>
+		.gold-letter {
+			background-image: url('gold-letter.png');
+			background-repeat: no-repeat;
+			background-size: contain;
+			width: 300px;
+			height: 300px;
+			position: relative;
+			text-align: center;
+			font-size: 200px;
+			font-weight: bold;
+			color: transparent;
+			-webkit-text-stroke: 4px #d4af37;
+		}
+
+		.gold-letter::before {
+			content: "";
+			background-color: rgba(0, 0, 0, 0.2);
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 20px;
+			left: 20px;
+			z-index: -1;
+			transform: rotateY(45deg) translateX(-20%);
+			opacity: 0.8;
+			filter: blur(10px);
+			border-radius: 10px;
+			box-shadow: inset 0px 0px 20px 5px rgba(0, 0, 0, 0.5); /* Added inset to create an inner shadow */
+		}
+	</style>
+</head>
+<body>
+	<div class="gold-letter">D</div>
+</body>
+</html>

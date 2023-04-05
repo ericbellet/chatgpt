@@ -2,5 +2,8 @@
     "python.analysis.extraPaths": [
         "/Users/eric.bellet/.vscode/extensions/databricks.databricks-0.3.7-darwin-x64/resources/python/stubs",
         "./src"
-    ]
+    ],
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.external.osxExec": "iTerm.app",
+    "terminal.integrated.fontFamily": "D2Coding"
 }
