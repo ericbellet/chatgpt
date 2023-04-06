@@ -147,9 +147,16 @@ class GPT():
         return response["choices"][0]["message"]["content"].strip(" \n")  
     
     def eval_same_language(self, question, answer):
-        from langdetect import detect
-        question_lang = detect(question)
-        answer_lang = detect(answer)
+        # from langdetect import detect
+        # question_lang = detect(question)
+        # answer_lang = detect(answer)
+        import langid
+        langid.set_languages(['es', 'en', 'ca'])
+        question_lang, score = langid.classify(question)
+        answer_lang, score = langid.classify(answer)
+
+
+        #question_lang = 'es' if question_lang not in ['ca', 'es', 'en', 'fr'] else question_lang
 
         if question_lang == answer_lang:
             return (True, question_lang)
@@ -157,6 +164,7 @@ class GPT():
             return (False, question_lang)
 
     def translate_answer(self, answer, language):
+        logger.info(f"Translating answer {answer}")
         prompt = f"Translate to {language} this: {answer}"
         return self.answer_query_with_context(prompt) 
 
@@ -204,4 +212,4 @@ if __name__ == '__main__':
     preprocessData = GPT()
     # [preprocessData.preprocess(file_name) for file_name in file_names]
     preprocessData.load_vectorDB()
-    print(preprocessData.query("Dime los 5 puntos más importantes de The Experience the economics"))
+    print(preprocessData.query("Dame estrategias"))

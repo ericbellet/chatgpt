@@ -13,9 +13,8 @@ def chatbot_interface():
         fn=chatbot,
         inputs=gr.inputs.Textbox(lines=7, label="Enter your text"),
         outputs="text",
-        capture_session=True,
-        title="ChatBot"
+        title="CXLab Chatbot"
     )
 
-chatbot_interface().launch()
+chatbot_interface().launch(share=True)
 
